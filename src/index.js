@@ -1,16 +1,4 @@
 const destinationURL = "http://localhost:3000/pups";
-const formData = {
-    name: "",
-    email: ""
-};
-const configurationObject = {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-    },
-    body: JSON.stringify(formData)
-};
 
 let dogObject;
 fetch(destinationURL)
@@ -38,7 +26,7 @@ function addNamesToHTML(dogArray) {
     for (let i = 0; i < dogArray.length; i++) {
         const dogSpan = document.createElement('span');
         dogSpan.textContent = dogArray[i].name;
-        parentNode.appendChild(dogSpan)
+        parentNode.append(dogSpan)
     }
 }
 
@@ -46,9 +34,12 @@ function addNamesToHTML(dogArray) {
 
 // add event handler that receives click event on each span
 function handleClickEvent() {
-    let dogNodes = document.querySelectorAll("span")
+    let dogNodes = document.querySelectorAll("span");
     for (let i = 0; i < dogNodes.length; i++) {
-        dogNodes[i].addEventListener("click", displayDetail(dogObjArray[i]))
+        dogNodes[i].addEventListener("click", function() {
+            displayDetail(dogObjArray[i]);
+            // console.log("click event triggered")
+        })
     }
 }
 
@@ -59,14 +50,20 @@ function displayDetail(dog) {
     const dogButton = document.createElement("button");
     dogHeading.textContent = dog.name;
     dogImg.src = dog.image;
-    dogButton.textContent = dog.isGoodDog;
+    dogButton.textContent = dog.isGoodDog ? "Good Dog!" : "Bad Dog!";
+    dogButton.addEventListener("click", function() {
+        dog.isGoodDog = !dog.isGoodDog;
+        dogButton.textContent = dog.isGoodDog ? "Good Dog!" : "Bad Dog!";
+    })
+    removeAllChildNodes(displayLocation)
     displayLocation.appendChild(dogHeading)
     displayLocation.appendChild(dogImg)
     displayLocation.appendChild(dogButton)
-}
-
-function addDescriptionToDiv(dogData) {
 
 }
 
-
+function removeAllChildNodes(parentNode) {
+    while (parentNode.firstChild) {
+        parentNode.removeChild(parentNode.firstChild);
+    }
+}
